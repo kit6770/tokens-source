@@ -5,13 +5,12 @@ import GlobalContextProvider from './app-context'
 import useSWRMutation from 'swr/mutation'
 import { useEffect } from 'react'
 import useSWR from 'swr'
+import AIView from './ai/page'
 
 export default function Home() {
   return (
     <GlobalContextProvider>
-      <main className='h-screen bg-black'>
-      </main>
+      <AIView />
     </GlobalContextProvider>
   )
 }
-

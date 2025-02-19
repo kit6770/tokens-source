@@ -11,6 +11,10 @@
     "predeploy": "npm run build"
   },
   "dependencies": {
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.4",
+    "@mui/material": "^6.4.4",
+    "@mui/material-nextjs": "^6.4.3",
     "@tailwindcss/postcss": "latest",
     "classnames": "latest",
     "gh-pages": "latest",
