@@ -48,7 +48,7 @@ export default function ProjectPartyCard(props: Iprops) {
         <div className='bg-[#18181B] rounded-[16px]'>
             <div className='card-cover rounded-t-[16px]'>
                 <div
-                    className='w-full h-[200px] bg-cover bg-center bg-no-repeat'
+                    className='w-full h-[200px] bg-cover bg-center bg-no-repeat rounded-t-[16px]'
                     style={{
                         backgroundImage: `url(${mockImg})`,
                     }}

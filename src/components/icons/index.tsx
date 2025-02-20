@@ -6,6 +6,10 @@ import PoolInfoIcon from "./poolInfo";
 import CopyIcon from "./copy";
 import SearchIcon from "./search";
 import TelegramIcon from "./telegram";
+import StarIcon from "./star";
+import EagleIcon from "./eagle";
+import CapsuleIcon from "./capsule";
+import BrocoliIcon from "./brocoli";
 
 export {
     Info as InfoIcon,
@@ -15,5 +19,9 @@ export {
     PoolInfoIcon,
     CopyIcon,
     SearchIcon,
-    TelegramIcon
+    TelegramIcon,
+    StarIcon,
+    EagleIcon,
+    CapsuleIcon,
+    BrocoliIcon,
 }
