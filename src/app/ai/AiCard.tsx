@@ -23,11 +23,17 @@ import LiteLogoIcon from "../../../public/img/lite_logo.svg"
 import BullXLogoIcon from "../../../public/img/bullX_logo.svg"
 import App3LogoIcon from "../../../public/img/app3_logo.svg"
 import App4LogoIcon from "../../../public/img/app4_logo.svg"
+import UniversalX from "../../../public/img/universalX.svg"
+import Trojan from "../../../public/img/trojan.svg"
+import GMGNSniperBot from "../../../public/img/gmgn_sniper_bot.svg"
 
 import CapsuleIcon from "../../../public/img/capsule_icon.svg"
 import TwitterIcon from "../../../public/img/twitter_icon.svg"
 import NetworkIcon from "../../../public/img/network_icon.svg"
-import { InfoIcon } from '@/components/icons'
+
+import { InfoIcon, MoreIcon } from '@/components/icons'
+import ITooltip from '@/components/tooltip'
+import LabelTag from '@/components/label-tag'
 
 type Iprops = {
     data: any
@@ -85,6 +91,21 @@ export default function AiCard(props: Iprops) {
             icon: App4LogoIcon.src,
             url: '',
         },
+        {
+            name: 'UniversalX',
+            icon: UniversalX.src,
+            url: '',
+        },
+        {
+            name: 'Trojan',
+            icon: Trojan.src,
+            url: '',
+        },
+        {
+            name: 'GMGNSniperBot',
+            icon: GMGNSniperBot.src,
+            url: '',
+        },
     ]
 
     const renderCardFieldInfoArea = () => {
@@ -114,12 +135,14 @@ export default function AiCard(props: Iprops) {
                 </div>
 
                 <div className='mt-[-6px]'>
-                    {tagList.map((i) => {
+                    {tagList.map((i, index) => {
                         return (
-                            <div key={i.title} style={{ backgroundColor: i.color }} className="px-[8px] py-[5px] items-center justify-center gap-[6px] rounded-[20px] inline-flex mr-[6px] mt-[6px]">
-                                <img src={i.icon} className='size-[14px]' />
-                                <div className="text-[12px] leading-[18px]">{i.title}</div>
-                            </div>
+                            <LabelTag
+                                key={index}
+                                text={i.title}
+                                icon={i.icon}
+                                bgColor={i.color}
+                            />
                         )
                     })}
                 </div>
@@ -245,13 +268,29 @@ export default function AiCard(props: Iprops) {
     const renderAppActionArea = () => {
         return (
             <div className='flex flex-row justify-end items-center gap-[13px] pt-[16px]'>
-                {appList.map((i) => {
+                {appList?.slice(0, 5).map((i) => {
                     return (
                         <div key={i.name} className='rounded-[8px] bg-[#2F2F31] p-[4px] cursor-pointer'>
                             <img className='size-[16px]' src={i.icon} />
                         </div>
                     )
                 })}
+                <ITooltip title={(
+                    <div className='flex flex-col items-center gap-[24px] px-[24px] py-[16px]'>
+                        {
+                            appList?.slice(5)?.map((i, index) => {
+                                return (
+                                    <div key={index} className='flex flex-row gap-[16px] w-full cursor-pointer'>
+                                        <img className='size-[20px]' src={i.icon} />
+                                        <div className='text-[#FFFFFF] text-[16px] leading-[19.5px]'>{i.name}</div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                )}>
+                    <MoreIcon className='text-[16px] text-[#ffffff] cursor-pointer' />
+                </ITooltip>
             </div>
         )
     }

@@ -10,6 +10,7 @@ import PoolInfoCard from './PoolInfoCard';
 import RealTimeDataCard from './RealTimeDataCard';
 import BasicInfoCard from './BasicInfoCard';
 import KLineCard from './KLineCard';
+import SmartListCard from './SmartListCard';
 
 export default function TokenDetail() {
     const { address, token } = useParams();
@@ -21,6 +22,7 @@ export default function TokenDetail() {
         </div>
         <div className='flex-1 flex flex-col gap-[10px] overflow-auto hide-scrollbar'>
             <KLineCard />
+            <SmartListCard />
         </div>
         <div className='w-[320px] flex flex-col gap-[10px] overflow-auto hide-scrollbar'>
             <DegenCallCard />

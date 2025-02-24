@@ -139,7 +139,7 @@ export default function MutiSelect(props: Iprops) {
                 onClose={handleClose}
                 anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'right',
+                    horizontal: 'left',
                 }}
                 sx={{
                     '& .MuiPaper-root': {

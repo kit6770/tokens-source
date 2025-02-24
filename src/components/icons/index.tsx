@@ -10,6 +10,8 @@ import StarIcon from "./star";
 import EagleIcon from "./eagle";
 import CapsuleIcon from "./capsule";
 import BrocoliIcon from "./brocoli";
+import EditIcon from "./edit";
+import MoreIcon from "./more";
 
 export {
     Info as InfoIcon,
@@ -24,4 +26,6 @@ export {
     EagleIcon,
     CapsuleIcon,
     BrocoliIcon,
+    EditIcon,
+    MoreIcon,
 }

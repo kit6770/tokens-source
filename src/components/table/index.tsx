@@ -7,31 +7,38 @@ import {
     TableHead,
     TableRow,
     TableSortLabel,
-    TablePagination,
-    TextField,
-    Box
 } from '@mui/material';
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
-import { alpha } from '@mui/material/styles';
+import Empty from '../empty';
+import classNames from 'classnames';
+import SortTag, { SortType } from '../sort-tag';
 
-type ColumnsProps = {
+export type ITableColumnsProps = {
     key?: string,
     title: string;
     dataIndex: string;
-    render?: (text: string) => React.ReactNode;
+    render?: (text: string, data: any) => any;
     sortable?: boolean;
+    width?: string | number;
 }
 
 type Iprops = {
     dataSource: any[];
-    columns: ColumnsProps[];
+    columns: ITableColumnsProps[];
 }
 
 function DataTable(props: Iprops) {
     const { dataSource = [], columns = [] } = props;
-    const [order, setOrder] = useState<'asc' | 'desc'>('asc'); // 显式指定 order 类型
+    const [order, setOrder] = useState<SortType>('asc'); // 显式指定 order 类型
     const [orderBy, setOrderBy] = useState<string>('name');
-    const [displayRows, setDisplayRows] = useState(dataSource);
+    const [columnsMap, setColumnsMap] = useState<Map<string, any>>(new Map());
+
+    useEffect(() => {
+        const map = new Map();
+        columns.forEach((column) => {
+            map.set(column.dataIndex, column);
+        });
+        setColumnsMap(map);
+    }, [columns]);
 
     // Sorting function
     const handleRequestSort = (property: string) => {
@@ -40,81 +47,130 @@ function DataTable(props: Iprops) {
         setOrderBy(property);
     };
 
-    // Render table
-    return (
-        <Box sx={{ width: '100%', overflowX: 'auto' }}>
-            <TableContainer>
-                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                    <TableHead>
-                        <TableRow>
-                            {
-                                columns.map((column, index) => {
-                                    if (column.sortable) {
+    const renderEmpty = () => {
+        if (dataSource.length) return null;
+        return (
+            <div className='w-full text-center'>
+                <div className='flex items-center justify-center pt-[73px] pb-[128px]'>
+                    <Empty
+                        description='There is no data to show you right now'
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    const renderTableHeader = () => {
+        return (
+            <TableHead>
+                <TableRow>
+                    {
+                        columns.map((column, index) => {
+                            if (column.sortable) {
+                                return (
+                                    <TableCell
+                                        // sortDirection={orderBy === column.dataIndex ? order : false}
+                                        sortDirection={false}
+                                        className='!text-[#98989F] !border-b-[#2F2F31]'
+                                        width={column.width}
+                                    >
+                                        <TableSortLabel
+                                            active={orderBy === column.dataIndex}
+                                            direction={orderBy === column.dataIndex ? order : 'asc'}
+                                            onClick={() => handleRequestSort(column.dataIndex)}
+                                            sx={{
+                                                '&.Mui-active, &:hover': {
+                                                    color: '#98989F',
+                                                },
+                                                '&.Mui-active .MuiTableSortLabel-icon': {
+                                                    color: '#98989F',
+                                                    visibility: "hidden"
+                                                },
+                                                "&:hover .MuiTableSortLabel-icon": {
+                                                    opacity: 0,
+                                                    visibility: "hidden"
+                                                },
+                                                ".MuiTableSortLabel-icon": {
+                                                    opacity: 0,
+                                                    visibility: "hidden !important"
+                                                },
+                                            }}
+                                            className='flex flex-col items-center gap-[6px]'
+                                        >
+                                            <div className='whitespace-nowrap break-words'>{column.title}</div>
+                                            <SortTag value={order} needSort={orderBy === column.dataIndex} />
+                                        </TableSortLabel>
+                                    </TableCell>
+                                )
+                            }
+                            return (
+                                <TableCell className='!text-[#98989F] !border-b-[#2F2F31]'>
+                                    {column.title}
+                                </TableCell>
+                            )
+                        })
+                    }
+                </TableRow>
+            </TableHead>
+        )
+    }
+
+    const renderTableBody = () => {
+        if (!dataSource?.length) {
+            return <div className='empty_table' />;
+        }
+        return (
+            <TableBody>
+                {
+                    dataSource.map((data, dataSourceIndex) => {
+                        return (
+                            <TableRow className='!text-[#ffffff]'>
+                                {
+                                    columns.map((column, index) => {
+                                        if (!column.dataIndex) {
+                                            return (
+                                                <TableCell
+                                                    key={`${column.dataIndex}-${index}}`}
+                                                    className='!text-[#ffffff]'
+                                                    width={column.width}
+                                                />
+                                            )
+                                        }
+                                        const _value = data[column.dataIndex]
+                                        let cellEle = _value;
+                                        if (column?.render && typeof column?.render === 'function') {
+                                            cellEle = column.render(_value, data) || _value;
+                                        }
                                         return (
                                             <TableCell
-                                                sortDirection={orderBy === column.dataIndex ? order : false}
+                                                key={`${column.dataIndex}-${index}}`}
+                                                className={classNames('!text-[#ffffff]', {
+                                                    '!border-b-[0px]': dataSourceIndex === dataSource.length - 1,
+                                                })}
+                                                width={column.width}
                                             >
-                                                <TableSortLabel
-                                                    active={orderBy === column.dataIndex}
-                                                    direction={orderBy === column.dataIndex ? order : 'asc'}
-                                                    onClick={() => handleRequestSort(column.dataIndex)}
-                                                >
-                                                    {column.title}
-                                                </TableSortLabel>
+                                                {cellEle}
                                             </TableCell>
                                         )
-                                    }
-                                    return (
-                                        <TableCell>
-                                            {column.title}
-                                        </TableCell>
-                                    )
-                                })
-                            }
-                            {/* <TableCell
-                                sortDirection={orderBy === 'name' ? order : false}
-                            >
-                                <TableSortLabel
-                                    active={orderBy === 'name'}
-                                    direction={orderBy === 'name' ? order : 'asc'}
-                                    onClick={() => handleRequestSort('name')}
-                                >
-                                    Name
-                                </TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'age'}
-                                    direction={orderBy === 'age' ? order : 'asc'}
-                                    onClick={() => handleRequestSort('age')}
-                                >
-                                    Age
-                                </TableSortLabel>
-                            </TableCell>
-                            <TableCell>
-                                <TableSortLabel
-                                    active={orderBy === 'country'}
-                                    direction={orderBy === 'country' ? order : 'asc'} // 修正方向属性
-                                    onClick={() => handleRequestSort('country')}
-                                >
-                                    Country
-                                </TableSortLabel>
-                            </TableCell> */}
-                        </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                        {displayRows.map((row, index) => (
-                            <TableRow hover tabIndex={-1} key={row.name}>
-                                <TableCell>{row.name}</TableCell>
-                                <TableCell>{row.age}</TableCell>
-                                <TableCell>{row.country}</TableCell>
+                                    })
+                                }
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Box>
+                        )
+                    })
+                }
+            </TableBody>
+        )
+    }
+
+    // Render table
+    return (
+        <TableContainer className='bg-[#18181B] w-full overflow-auto px-[16px] rounded-[16px]'>
+            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                {renderTableHeader()}
+                {renderTableBody()}
+            </Table>
+            {renderEmpty()}
+        </TableContainer>
     );
 }
 
