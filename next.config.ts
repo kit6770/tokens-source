@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   // output: 'export',
-  basePath: '/tokens',
+  // basePath: '/tokens',
 
   // 如果需要代理设置
   async rewrites() {

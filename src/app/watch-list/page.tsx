@@ -42,7 +42,7 @@ export default function AIView() {
     const [searchDuration, setSearchDuration] = useState<string>("5m")
 
     useEffect(() => {
-        fetch('/tokens/dex-api/v1/data/get_twitter_tweets_by_uid?tweet_user_id=1160678898478096386&limit=2')
+        fetch('/dex-api/v1/data/get_twitter_tweets_by_uid?tweet_user_id=1160678898478096386&limit=2')
     }, [])
 
     const renderHeader = () => {
